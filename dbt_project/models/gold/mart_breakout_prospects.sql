@@ -198,7 +198,7 @@ calculated_prospects as (
     left join league_benchmarks lb
         on pss.league_id = lb.league_id
         and pss.season_id = lb.season_id
-    where pss.minutes_played >= {{ var('min_minutes_played', 270) }}
+    where pss.minutes_played >= {{ var('min_minutes_played', 45) }}
 )
 select
     prospect_key,

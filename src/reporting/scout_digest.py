@@ -265,7 +265,8 @@ def generate_grounded_blurb_fallback(player: dict[str, Any]) -> str:
     Guaranteed zero hallucinated traits, 100% numbers-driven.
     """
     name = player.get("player_name", "השחקן")
-    age = player.get("age", 20)
+    age = player.get("age")
+    age_str = f" (גיל {age})" if age is not None else ""
     goals = player.get("goals", 0)
     minutes = player.get("minutes_played", 0)
     npg = player.get("npg_per_90", 0.0)
@@ -276,7 +277,7 @@ def generate_grounded_blurb_fallback(player: dict[str, Any]) -> str:
 
     # Sentence 1: Attacking output / minutes ratio
     s1 = (
-        f"{name} (גיל {age}) רשם העונה {goals} שערים ב-{minutes} דקות משחק במדי {team}, "
+        f"{name}{age_str} רשם העונה {goals} שערים ב-{minutes} דקות משחק במדי {team}, "
         f"המהווים {share}% מסך שערי הקבוצה ובקצב של {npg} שערים ל-90 דקות."
     )
 
@@ -549,7 +550,9 @@ def export_whatsapp_digest(
         blurb = p.get("ai_blurb", "")
         badges = p.get("badges_list", [])
 
-        lines.append(f"*{rank}. {name}* (גיל {age}) | *{team}*")
+        age = p.get("age")
+        age_str = f" (גיל {age})" if age is not None else ""
+        lines.append(f"*{rank}. {name}*{age_str} | *{team}*")
         lines.append(f"🏆 *ליגה:* {league} ({reg})")
         lines.append(f"🔥 *Breakout Index:* *{score}*")
         lines.append(f"📊 *מדדים:* {goals} שערים ב-{mins}' ({npg} ל-90) | {share}% משערי הקבוצה")

@@ -29,5 +29,5 @@ snapshots:
     +target_schema: main
 
 vars:
-  min_minutes_played: 270
+  min_minutes_played: 45
 

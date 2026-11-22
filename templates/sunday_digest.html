@@ -706,7 +706,7 @@
               <div>{{ p.team_name }}</div>
               <div class="table-team">{{ p.league_name_he }}</div>
             </td>
-            <td><strong>{{ p.age }}</strong></td>
+            <td><strong>{{ p.age if p.age is not none else '-' }}</strong></td>
             <td>{{ p.minutes_played }}'</td>
             <td>{{ p.appearances }} ({{ p.starts }}/{{ p.sub_appearances }})</td>
             <td><strong>{{ p.goals }}</strong></td>
@@ -751,7 +751,7 @@
                 {% if p.is_u21 %}<span class="badge badge-u21">U21</span>{% elif p.is_u23 %}<span class="badge badge-u21">U23</span>{% endif %}
               </div>
               <div class="player-team">
-                {{ p.team_name }} • {{ p.league_name_he }} ({{ p.region }}) • גיל: {{ p.age }}
+                {{ p.team_name }} • {{ p.league_name_he }} ({{ p.region }}){% if p.age is not none %} • גיל: {{ p.age }}{% endif %}
               </div>
             </div>
           </div>
