@@ -6,7 +6,7 @@ with current_players as (
 )
 select
     cast(player_id as bigint) as player_id,
-    cast(full_name as varchar) as full_name,
+    coalesce(cast(full_name as varchar), 'שחקן ' || cast(player_id as varchar)) as full_name,
     cast(birth_date as date) as birth_date,
     cast(date_part('year', birth_date) as integer) as birth_year,
     case 

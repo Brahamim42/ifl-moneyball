@@ -254,13 +254,14 @@ class PlayerEnricher:
                     html = await self.fetch_player_profile(page, p_id, season_id=season_id)
                     profile = parse_player_page(html, player_id=p_id, season_id=season_id)
 
+                    resolved_name = profile.full_name or cand.get("player_name") or f"שחקן {p_id}"
                     snapshot = PlayerSnapshot(
                         scraped_at=datetime.now(timezone.utc),
                         player_id=p_id,
                         birth_date=profile.birth_date,
                         current_team_id=profile.current_team_id or cand.get("team_id"),
                         current_league_id=profile.current_league_id or cand.get("league_id"),
-                        full_name=profile.full_name or cand.get("player_name"),
+                        full_name=resolved_name,
                         nationality=profile.nationality,
                         current_team_name=profile.current_team_name or cand.get("team_name"),
                         current_league_name=profile.current_league_name,
@@ -290,11 +291,12 @@ class PlayerEnricher:
         con = duckdb.connect()
         try:
             query = f"""
-                SELECT DISTINCT player_id, team_name, season_id, league_id
+                SELECT DISTINCT player_id, player_name, team_name, season_id, league_id
                 FROM read_parquet('{pattern}', hive_partitioning=1)
+                WHERE player_id IS NOT NULL
             """
             if season_id is not None:
-                query += f" WHERE season_id = {season_id}"
+                query += f" AND season_id = {season_id}"
             rows = con.execute(query).fetchall()
         except Exception as exc:
             logger.warning(f"Could not load appearances from {pattern}: {exc}")
@@ -303,11 +305,12 @@ class PlayerEnricher:
             con.close()
 
         candidates: list[dict[str, Any]] = []
-        for p_id, t_name, s_id, l_id in rows:
+        for p_id, p_name, t_name, s_id, l_id in rows:
             if p_id is None:
                 continue
             candidates.append({
                 "player_id": int(p_id),
+                "player_name": p_name,
                 "team_name": t_name,
                 "team_id": None,  # Will be enriched from profile or match metadata
                 "season_id": int(s_id) if s_id is not None else None,
