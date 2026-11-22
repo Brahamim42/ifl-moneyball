@@ -1,0 +1,182 @@
+version: 2
+
+models:
+  - name: mart_player_season_stats
+    description: "Season-to-date player performance aggregates per (player_id, season_id, league_id), tracking appearances, minutes, goals, npg_per_90, cards, and team goal share."
+    columns:
+      - name: player_season_league_key
+        description: "Surrogate primary key MD5(player_id || '-' || season_id || '-' || league_id)"
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "Official IFA player identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_players')
+                field: player_id
+      - name: season_id
+        description: "IFA season identifier"
+        tests:
+          - not_null
+      - name: league_id
+        description: "IFA league identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_leagues')
+                field: league_id
+      - name: team_id
+        description: "Primary/latest team identifier in season"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_teams')
+                field: team_id
+      - name: player_name
+        description: "Full Hebrew player name"
+        tests:
+          - not_null
+      - name: team_name
+        description: "Normalized club name"
+        tests:
+          - not_null
+      - name: league_name_en
+        description: "English league name"
+        tests:
+          - not_null
+      - name: tier
+        description: "Competition division tier"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Senior Tier 3', 'Senior Tier 4', 'Senior Tier 5', 'U19 Tier 2']
+      - name: category
+        description: "Division category (Senior or Youth)"
+        tests:
+          - not_null
+      - name: appearances
+        description: "Season-to-date match sheet appearances"
+        tests:
+          - not_null
+      - name: starts
+        description: "Season-to-date match starts"
+        tests:
+          - not_null
+      - name: sub_appearances
+        description: "Season-to-date appearances off the bench"
+        tests:
+          - not_null
+      - name: minutes_played
+        description: "Season-to-date total minutes played"
+        tests:
+          - not_null
+      - name: goals
+        description: "Season-to-date total goals scored"
+        tests:
+          - not_null
+      - name: npg_per_90
+        description: "Season-to-date non-penalty goals per 90 minutes played"
+        tests:
+          - not_null
+      - name: yellow_cards
+        description: "Season-to-date yellow cards received"
+        tests:
+          - not_null
+      - name: red_cards
+        description: "Season-to-date red cards received"
+        tests:
+          - not_null
+      - name: total_team_goals
+        description: "Season-to-date total goals scored by player's team"
+        tests:
+          - not_null
+      - name: team_goal_share_pct
+        description: "Percentage of team goals scored by this player (0-100%)"
+        tests:
+          - not_null
+      - name: team_goal_share
+        description: "Fraction of team goals scored by this player (0.0-1.0)"
+        tests:
+          - not_null
+
+  - name: mart_breakout_prospects
+    description: "Scouting prospects mart evaluating players with >= 270 minutes using rolling 5-match window functions, 4 scouting flags, and composite breakout_index."
+    columns:
+      - name: prospect_key
+        description: "Surrogate primary key MD5(player_id || '-' || season_id || '-' || league_id)"
+        tests:
+          - unique
+          - not_null
+      - name: player_id
+        description: "Official IFA player identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_players')
+                field: player_id
+      - name: season_id
+        description: "IFA season identifier"
+        tests:
+          - not_null
+      - name: league_id
+        description: "IFA league identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_leagues')
+                field: league_id
+      - name: team_id
+        description: "Primary/latest team identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_teams')
+                field: team_id
+      - name: tier
+        description: "Competition division tier"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Senior Tier 3', 'Senior Tier 4', 'Senior Tier 5', 'U19 Tier 2']
+      - name: minutes_played
+        description: "Total season minutes played (filtered for >= 270)"
+        tests:
+          - not_null
+      - name: npg_per_90
+        description: "Non-penalty goals per 90 minutes"
+        tests:
+          - not_null
+      - name: team_goal_share_pct
+        description: "Percentage of team goals scored by player"
+        tests:
+          - not_null
+      - name: league_z_score
+        description: "Standardized goalscoring rate z-score within league and season"
+        tests:
+          - not_null
+      - name: is_u21_ironman
+        description: "Scouting flag: Age <= 21 and >= 80% available senior minutes played"
+        tests:
+          - not_null
+      - name: is_sudden_role_breakout
+        description: "Scouting flag: Last 3 matches avg minutes jumped >= +45 vs prior 5 matches, or consecutive goals off the bench"
+        tests:
+          - not_null
+      - name: is_youth_senior_callup
+        description: "Scouting flag: Player appearing in both U19 Noar and senior Liga Alef/Bet in snap_players_scd2"
+        tests:
+          - not_null
+      - name: breakout_index
+        description: "Composite 0-100 scout ranking score"
+        tests:
+          - not_null

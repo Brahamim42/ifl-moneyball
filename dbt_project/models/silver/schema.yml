@@ -1,0 +1,209 @@
+version: 2
+
+models:
+  - name: dim_leagues
+    description: "Dimension table containing the 10 target Israeli lower and youth football divisions"
+    columns:
+      - name: league_id
+        description: "Official IFA league identifier"
+        tests:
+          - unique
+          - not_null
+      - name: season_id
+        description: "IFA season identifier"
+        tests:
+          - not_null
+      - name: league_name_en
+        description: "English division name"
+        tests:
+          - not_null
+      - name: league_name_he
+        description: "Hebrew official division name"
+        tests:
+          - not_null
+      - name: tier
+        description: "Competition tier"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Senior Tier 3', 'Senior Tier 4', 'Senior Tier 5', 'U19 Tier 2']
+      - name: category
+        description: "Division category (Senior or Youth)"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Senior', 'Youth']
+
+  - name: dim_teams
+    description: "Standardized football clubs with normalized Hebrew names and prefixes"
+    columns:
+      - name: team_id
+        description: "Official IFA team identifier"
+        tests:
+          - unique
+          - not_null
+      - name: team_name_raw
+        description: "Raw team name as scraped from IFA portal"
+        tests:
+          - not_null
+      - name: team_name_normalized
+        description: "Clean standardized Hebrew club name"
+        tests:
+          - not_null
+
+  - name: dim_dates
+    description: "Calendar date dimension with Israeli weekend matchday classification"
+    columns:
+      - name: date_key
+        description: "Date surrogate key in YYYYMMDD integer format"
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: "Full calendar date"
+        tests:
+          - unique
+          - not_null
+      - name: is_weekend_matchday
+        description: "True if Friday or Saturday in Israel"
+        tests:
+          - not_null
+
+  - name: dim_players
+    description: "Current player demographics, age, U21/U23 flags, and club registrations"
+    columns:
+      - name: player_id
+        description: "Official IFA player identifier"
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Player full Hebrew name"
+        tests:
+          - not_null
+      - name: is_current
+        description: "Flag indicating active SCD Type 2 record"
+        tests:
+          - not_null
+
+  - name: fact_match_appearances
+    description: "Individual player match appearances with exact calculated minutes and metrics"
+    columns:
+      - name: appearance_key
+        description: "Surrogate key MD5(match_id || '-' || player_id)"
+        tests:
+          - unique
+          - not_null
+      - name: match_id
+        description: "IFA match identifier"
+        tests:
+          - not_null
+      - name: player_id
+        description: "IFA player identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_players')
+                field: player_id
+      - name: team_id
+        description: "Team identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_teams')
+                field: team_id
+      - name: opponent_team_id
+        description: "Opponent team identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_teams')
+                field: team_id
+      - name: league_id
+        description: "League identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_leagues')
+                field: league_id
+      - name: season_id
+        description: "Season identifier"
+        tests:
+          - not_null
+      - name: date_key
+        description: "Match date key"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_key
+      - name: minutes_played
+        description: "Exact match minutes played (0 to 120)"
+        tests:
+          - not_null
+      - name: is_clean_sheet
+        description: "True if side conceded zero goals"
+        tests:
+          - not_null
+
+  - name: fact_match_events
+    description: "Chronological match events (goals, cards, substitutions)"
+    columns:
+      - name: event_key
+        description: "Surrogate key MD5(match_id || '-' || event_seq)"
+        tests:
+          - unique
+          - not_null
+      - name: match_id
+        description: "IFA match identifier"
+        tests:
+          - not_null
+      - name: event_seq
+        description: "Event sequence number within match"
+        tests:
+          - not_null
+      - name: event_type
+        description: "Event classification (goal, yellow_card, red_card, substitution)"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['goal', 'yellow_card', 'red_card', 'substitution']
+      - name: player_id
+        description: "IFA player identifier"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_players')
+                field: player_id
+      - name: team_id
+        description: "Team identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_teams')
+                field: team_id
+      - name: league_id
+        description: "League identifier"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_leagues')
+                field: league_id
+      - name: date_key
+        description: "Event date key"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_key

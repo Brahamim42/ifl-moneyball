@@ -1,0 +1,74 @@
+# Target Israeli Lower & Youth Leagues Configuration
+# Parameterizes ingestion, staging, dimensional modeling, and scouting marts.
+default_season_id: 28
+
+leagues:
+  - league_id: 61
+    season_id: 28
+    tier: "Senior Tier 3"
+    region: "North"
+    name_en: "Liga Alef North"
+    name_he: "ליגה א' צפון"
+
+  - league_id: 62
+    season_id: 28
+    tier: "Senior Tier 3"
+    region: "South"
+    name_en: "Liga Alef South"
+    name_he: "ליגה א' דרום"
+
+  - league_id: 71
+    season_id: 28
+    tier: "Senior Tier 4"
+    region: "North"
+    name_en: "Liga Bet North A"
+    name_he: "ליגה ב' צפון א'"
+
+  - league_id: 72
+    season_id: 28
+    tier: "Senior Tier 4"
+    region: "North"
+    name_en: "Liga Bet North B"
+    name_he: "ליגה ב' צפון ב'"
+
+  - league_id: 73
+    season_id: 28
+    tier: "Senior Tier 4"
+    region: "South"
+    name_en: "Liga Bet South A"
+    name_he: "ליגה ב' דרום א'"
+
+  - league_id: 74
+    season_id: 28
+    tier: "Senior Tier 4"
+    region: "South"
+    name_en: "Liga Bet South B"
+    name_he: "ליגה ב' דרום ב'"
+
+  - league_id: 102
+    season_id: 28
+    tier: "U19 Tier 2"
+    region: "North"
+    name_en: "Liga Leumit LaNoar North"
+    name_he: "ליגה לאומית לנוער צפון"
+
+  - league_id: 103
+    season_id: 28
+    tier: "U19 Tier 2"
+    region: "South"
+    name_en: "Liga Leumit LaNoar South"
+    name_he: "ליגה לאומית לנוער דרום"
+
+  - league_id: 89
+    season_id: 28
+    tier: "Senior Tier 5"
+    region: "Central"
+    name_en: "Liga Gimel Central"
+    name_he: "ליגה ג' מרכז"
+
+  - league_id: 684
+    season_id: 28
+    tier: "Senior Tier 5"
+    region: "South"
+    name_en: "Liga Gimel South"
+    name_he: "ליגה ג' דרום"

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דוח סקאוטינג שבועי - פרוספקטים פורצים | IL-Scout-Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: #121826;
+      --bg-card-hover: #1a2234;
+      --bg-surface: #1e293b;
+      --border-subtle: #2d3748;
+      --border-accent: #3b82f6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-accent: #38bdf8;
+      --gold: #f59e0b;
+      --gold-bg: rgba(245, 158, 11, 0.15);
+      --silver: #94a3b8;
+      --bronze: #b45309;
+      --badge-ironman: #10b981;
+      --badge-ironman-bg: rgba(16, 185, 129, 0.15);
+      --badge-role: #f59e0b;
+      --badge-role-bg: rgba(245, 158, 11, 0.15);
+      --badge-callup: #8b5cf6;
+      --badge-callup-bg: rgba(139, 92, 246, 0.15);
+      --badge-u21: #06b6d4;
+      --badge-u21-bg: rgba(6, 182, 212, 0.15);
+      --blurb-bg: #151d30;
+      --blurb-border: #38bdf8;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Heebo', 'Assistant', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      direction: rtl;
+      text-align: right;
+      line-height: 1.6;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #111827 0%, #1e293b 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, #3b82f6, #10b981);
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .title-group h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+
+    .title-group p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .pill {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      padding: 0.4rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pill-accent {
+      background-color: rgba(59, 130, 246, 0.2);
+      border-color: var(--border-accent);
+      color: var(--text-accent);
+    }
+
+    /* Summary KPI Stats */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .kpi-subtext {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .badge-ironman {
+      background-color: var(--badge-ironman-bg);
+      color: var(--badge-ironman);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .badge-role {
+      background-color: var(--badge-role-bg);
+      color: var(--badge-role);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .badge-callup {
+      background-color: var(--badge-callup-bg);
+      color: var(--badge-callup);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .badge-u21 {
+      background-color: var(--badge-u21-bg);
+      color: var(--badge-u21);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+    }
+
+    .badge-gold {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #000000;
+      font-weight: 900;
+    }
+
+    .badge-silver {
+      background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+      color: #000000;
+      font-weight: 900;
+    }
+
+    .badge-bronze {
+      background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    /* Score Ring / Badge */
+    .breakout-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0 0.5rem;
+    }
+
+    .score-high {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .score-mid {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .score-regular {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Prospect Card List */
+    .prospects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .prospect-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .prospect-card:hover {
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: var(--shadow-md);
+      background-color: var(--bg-card-hover);
+    }
+
+    .prospect-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .player-identity {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rank-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .rank-1 { background: #f59e0b; color: #000; border-color: #f59e0b; }
+    .rank-2 { background: #94a3b8; color: #000; border-color: #94a3b8; }
+    .rank-3 { background: #b45309; color: #fff; border-color: #b45309; }
+
+    .player-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .player-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .player-team {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .player-score-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .breakout-meta {
+      text-align: left;
+    }
+
+    .breakout-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Badges Bar */
+    .prospect-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-name {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .metric-val {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .metric-val-accent {
+      color: var(--text-accent);
+    }
+
+    /* AI Blurb Callout */
+    .ai-blurb-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border-right: 4px solid var(--border-accent);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      border-left: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-top: 0.75rem;
+      position: relative;
+    }
+
+    .ai-blurb-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-accent);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .ai-blurb-text {
+      font-size: 1rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    /* Overview Table */
+    .table-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    th {
+      background-color: var(--bg-surface);
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border-subtle);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--bg-card-hover);
+    }
+
+    .table-player-name {
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .table-team {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--text-accent);
+      text-decoration: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background-color: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Print Styles for PDF */
+    @media print {
+      body {
+        background-color: #ffffff;
+        color: #111827;
+        padding: 0;
+        font-size: 11pt;
+      }
+
+      header {
+        background: none;
+        border: 2px solid #e5e7eb;
+        box-shadow: none;
+        color: #111827;
+        page-break-after: avoid;
+      }
+
+      .title-group h1 {
+        color: #111827;
+      }
+
+      .title-group p {
+        color: #4b5563;
+      }
+
+      .prospect-card {
+        background-color: #ffffff;
+        border: 1px solid #d1d5db;
+        box-shadow: none;
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem;
+      }
+
+      .player-name {
+        color: #111827;
+      }
+
+      .player-team {
+        color: #4b5563;
+      }
+
+      .metrics-grid {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+      }
+
+      .metric-name {
+        color: #64748b;
+      }
+
+      .metric-val {
+        color: #0f172a;
+      }
+
+      .ai-blurb-box {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-right: 4px solid #0284c7;
+      }
+
+      .ai-blurb-text {
+        color: #1e293b;
+      }
+
+      .table-container {
+        border: 1px solid #d1d5db;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+
+      table, th, td {
+        border-color: #e5e7eb;
+        color: #111827;
+      }
+
+      th {
+        background-color: #f3f4f6;
+      }
+
+      .pill {
+        border-color: #cbd5e1;
+        color: #334155;
+        background-color: #f1f5f9;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-top">
+        <div class="title-group">
+          <h1>
+            <span>⚽</span>
+            דוח סקאוטינג שבועי: פרוספקטים פורצים
+          </h1>
+          <p>זיהוי וניתוח כישרונות U21 / U23 מובילים בליגות הנמוכות וליגות הנוער בישראל</p>
+        </div>
+        <div class="meta-pills">
+          <div class="pill pill-accent">
+            <span>📍</span>
+            <span>אזור: {{ metadata.region_he }}</span>
+          </div>
+          <div class="pill">
+            <span>📅</span>
+            <span>תאריך: {{ metadata.generated_at }}</span>
+          </div>
+          <div class="pill">
+            <span>🎯</span>
+            <span>מוערכים: {{ metadata.total_prospects }} שחקנים</span>
+          </div>
+          {% if metadata.model_name %}
+          <div class="pill">
+            <span>🤖</span>
+            <span>מודל AI: {{ metadata.model_name }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    {% if prospects %}
+    <!-- Summary KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <span class="kpi-label">פרוספקט מוביל במדד פריצה</span>
+        <span class="kpi-value">{{ prospects[0].player_name }}</span>
+        <span class="kpi-subtext">{{ prospects[0].team_name }} (מדד: {{ prospects[0].breakout_index }})</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">ממוצע מדד פריצה (טופ 15)</span>
+        <span class="kpi-value">{{ metadata.avg_breakout_index }}</span>
+        <span class="kpi-subtext">מתוך סולם 0-100</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">מלך השערים בין הפורצים</span>
+        <span class="kpi-value">{{ metadata.top_scorer_name }}</span>
+        <span class="kpi-subtext">{{ metadata.top_scorer_goals }} שערים העונה</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">שחקני U21 איירונמן</span>
+        <span class="kpi-value">{{ metadata.ironman_count }}</span>
+        <span class="kpi-subtext">מעל 80% מדקות הבוגרים</span>
+      </div>
+    </div>
+
+    <!-- Section: Top 15 Overview Table -->
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>📊</span>
+        טבלת דירוג טופ 15 - מבט מרוכז
+      </h2>
+      <span class="pill">ממוין לפי מדד Breakout Index</span>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>שחקן</th>
+            <th>קבוצה וליגה</th>
+            <th>גיל</th>
+            <th>דקות</th>
+            <th>הופעות (ה/ס)</th>
+            <th>שערים</th>
+            <th>שערים/90</th>
+            <th>נתח שערים</th>
+            <th>תגי פריצה</th>
+            <th>ציון פריצה</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in prospects %}
+          <tr>
+            <td>
+              <span class="rank-indicator {% if p.rank == 1 %}rank-1{% elif p.rank == 2 %}rank-2{% elif p.rank == 3 %}rank-3{% endif %}">
+                {{ p.rank }}
+              </span>
+            </td>
+            <td>
+              <div class="table-player-name">{{ p.player_name }}</div>
+              <div class="table-team">{{ p.region }}</div>
+            </td>
+            <td>
+              <div>{{ p.team_name }}</div>
+              <div class="table-team">{{ p.league_name_he }}</div>
+            </td>
+            <td><strong>{{ p.age }}</strong></td>
+            <td>{{ p.minutes_played }}'</td>
+            <td>{{ p.appearances }} ({{ p.starts }}/{{ p.sub_appearances }})</td>
+            <td><strong>{{ p.goals }}</strong></td>
+            <td>{{ p.npg_per_90 }}</td>
+            <td>{{ p.team_goal_share_pct }}%</td>
+            <td>
+              {% if p.is_u21_ironman %}<span class="badge badge-ironman">🛡️ U21 איירונמן</span>{% endif %}
+              {% if p.is_sudden_role_breakout %}<span class="badge badge-role">⚡ פריצת תפקיד</span>{% endif %}
+              {% if p.is_youth_senior_callup %}<span class="badge badge-callup">🚀 קריאה מנוער</span>{% endif %}
+            </td>
+            <td>
+              <span class="breakout-score {% if p.breakout_index >= 80 %}score-high{% elif p.breakout_index >= 65 %}score-mid{% else %}score-regular{% endif %}">
+                {{ p.breakout_index }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Section: Detailed Scouting Profiles & AI Notes -->
+    <div class="section-header">
+      <h2 class="section-title">
+        <span>🔍</span>
+        פרופיל אנליטי והערות סקאוטינג AI
+      </h2>
+      <span class="pill">ניתוח מעוגן נתונים ללא תכונות מומצאות</span>
+    </div>
+
+    <div class="prospects-list">
+      {% for p in prospects %}
+      <div class="prospect-card" id="player-{{ p.player_id }}">
+        <div class="prospect-card-header">
+          <div class="player-identity">
+            <div class="rank-indicator {% if p.rank == 1 %}rank-1{% elif p.rank == 2 %}rank-2{% elif p.rank == 3 %}rank-3{% endif %}">
+              #{{ p.rank }}
+            </div>
+            <div class="player-title">
+              <div class="player-name">
+                {{ p.player_name }}
+                {% if p.is_u21 %}<span class="badge badge-u21">U21</span>{% elif p.is_u23 %}<span class="badge badge-u21">U23</span>{% endif %}
+              </div>
+              <div class="player-team">
+                {{ p.team_name }} • {{ p.league_name_he }} ({{ p.region }}) • גיל: {{ p.age }}
+              </div>
+            </div>
+          </div>
+          <div class="player-score-area">
+            <div class="breakout-meta">
+              <div class="breakout-label">Breakout Index</div>
+            </div>
+            <div class="breakout-score {% if p.breakout_index >= 80 %}score-high{% elif p.breakout_index >= 65 %}score-mid{% else %}score-regular{% endif %}">
+              {{ p.breakout_index }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges -->
+        <div class="prospect-badges">
+          {% if p.is_u21_ironman %}
+          <span class="badge badge-ironman">
+            🛡️ U21 איירונמן (80%+ דקות בוגרים)
+          </span>
+          {% endif %}
+          {% if p.is_sudden_role_breakout %}
+          <span class="badge badge-role">
+            ⚡ פריצת תפקיד פתאומית
+          </span>
+          {% endif %}
+          {% if p.is_youth_senior_callup %}
+          <span class="badge badge-callup">
+            🚀 קריאה מנוער לבוגרים
+          </span>
+          {% endif %}
+          <span class="badge pill">
+            <span>🎯</span>
+            <span>{{ p.tier }}</span>
+          </span>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-name">דקות משחק</span>
+            <span class="metric-val">{{ p.minutes_played }}'</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">הופעות (הרכב/ספסל)</span>
+            <span class="metric-val">{{ p.appearances }} ({{ p.starts }}/{{ p.sub_appearances }})</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">שערים</span>
+            <span class="metric-val metric-val-accent">{{ p.goals }}</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">שערים ל-90 דק'</span>
+            <span class="metric-val">{{ p.npg_per_90 }}</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">נתח שערי קבוצה</span>
+            <span class="metric-val">{{ p.team_goal_share_pct }}%</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">5 משחקים אחרונים</span>
+            <span class="metric-val">{{ p.rolling_goals_5 }} שערים ({{ p.rolling_npg_per_90 }}/90)</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-name">ציון תקן ליגתי</span>
+            <span class="metric-val">{{ p.league_z_score }}</span>
+          </div>
+        </div>
+
+        <!-- AI Blurb -->
+        <div class="ai-blurb-box">
+          <div class="ai-blurb-header">
+            <span>🤖</span>
+            <span>הערת סקאוט אנליטית (מעוגנת 100% בנתונים):</span>
+          </div>
+          <p class="ai-blurb-text">{{ p.ai_blurb }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <h2>לא נמצאו שחקנים התואמים את הקריטריונים</h2>
+      <p>לא אותרו פרוספקטים במאגר עם מעל 270 דקות משחק באזור המבוקש ({{ metadata.region_he }}).</p>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        דוח זה הופק אוטומטית ע"י שכבת ה-Gold של מנוע הסקאוטינג הישראלי <strong>il-scout-engine</strong>.
+      </p>
+      <p>
+        מקור הנתונים: פורטל ההתאחדות לכדורגל בישראל (IFA). כל הזכויות שמורות.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

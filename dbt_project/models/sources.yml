@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw immutable Parquet lakehouse storage layer ingested from the IFA portal"
+    tables:
+      - name: matches
+        description: "Raw match metadata and scores partitioned by season_id and league_id"
+        meta:
+          external_location: "read_parquet('{{ env_var('BRONZE_DIR', '../data/bronze') }}/season_id=*/league_id=*/matches.parquet')"
+      - name: appearances
+        description: "Raw player appearances, lineup status, minutes, and events"
+        meta:
+          external_location: "read_parquet('{{ env_var('BRONZE_DIR', '../data/bronze') }}/season_id=*/league_id=*/appearances.parquet')"
+      - name: players
+        description: "Timestamped player demographic snapshots and current club registrations"
+        meta:
+          external_location: "read_parquet('{{ env_var('BRONZE_DIR', '../data/bronze') }}/players/bronze_players.parquet')"
+      - name: etl_run_logs
+        description: "Ingestion pipeline run logs, watermarks, row counts, and status"
+        meta:
+          external_location: "read_parquet('{{ env_var('BRONZE_DIR', '../data/bronze') }}/etl_run_logs.parquet')"

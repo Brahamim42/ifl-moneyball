@@ -1,0 +1,12 @@
+il_scout_engine:
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../data/silver/scout_warehouse.duckdb') }}"
+      threads: 4
+    prod:
+      type: duckdb
+      path: "{{ env_var('MOTHERDUCK_DATABASE', 'md:il_scout_engine') }}"
+      token: "{{ env_var('MOTHERDUCK_TOKEN', '') }}"
+      threads: 4

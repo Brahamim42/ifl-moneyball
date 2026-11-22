@@ -1,0 +1,33 @@
+name: 'il_scout_engine'
+version: '1.0.0'
+config-version: 2
+
+profile: 'il_scout_engine'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  il_scout_engine:
+    staging:
+      +materialized: view
+    silver:
+      +materialized: table
+    gold:
+      +materialized: table
+
+snapshots:
+  il_scout_engine:
+    +target_schema: main
+
+vars:
+  min_minutes_played: 270
+

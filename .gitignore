@@ -1,0 +1,43 @@
+# Python & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.uv_cache/
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Data & Lakehouse
+data/*
+!data/**/.gitkeep
+output/*
+!output/.gitkeep
+*.parquet
+*.duckdb
+*.duckdb.wal
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.pem
+*.key
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.Rhistory
