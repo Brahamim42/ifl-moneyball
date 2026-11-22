@@ -458,6 +458,9 @@ class IFACrawler:
         else:
             target_leagues = all_leagues
 
+        if dry_run and target_leagues:
+            target_leagues = target_leagues[:1]
+
         logger.info(
             f"Starting IFA crawler run: season_id={target_season}, "
             f"leagues={len(target_leagues)}, lookback_days={lookback_days}, dry_run={dry_run}"

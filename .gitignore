@@ -17,10 +17,11 @@ htmlcov/
 
 # Local Data & Lakehouse
 data/*
+!data/bronze/
+!data/bronze/**
 !data/**/.gitkeep
 output/*
 !output/.gitkeep
-*.parquet
 *.duckdb
 *.duckdb.wal
 
