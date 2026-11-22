@@ -19,10 +19,13 @@ htmlcov/
 data/*
 !data/bronze/
 !data/bronze/**
+!data/silver/
+!data/silver/scout_warehouse.duckdb
 !data/**/.gitkeep
 output/*
 !output/.gitkeep
 *.duckdb
+!data/silver/scout_warehouse.duckdb
 *.duckdb.wal
 
 # Environment Variables & Secrets
